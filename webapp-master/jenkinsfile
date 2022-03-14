@@ -1,0 +1,36 @@
+pipeline {
+  tools {
+    maven 'maven'
+  }
+  agent any 
+  stages {
+    stage ('initialize') {
+	  steps {
+	  
+	    sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+            '''   
+	  
+	  }
+	
+	}
+	
+    stage ('build') {
+	
+	  steps {
+	  
+	    sh 'mvn clean package'
+	  }
+	  
+	  
+	 
+  }
+
+    stage ('Deploy-To-Tomcat') {
+	  steps{
+	   sshagen(['tomcat'])  {
+	  sshagent(['tomcat'])  {
+		 sh 'scp -o StrictHostKeyChecking=no /target/*.war andylab@192.168.1.80:/home/andylab/prod/apache-tomcat-8.5.43/webapps/webapp.war'
+
+		 }
