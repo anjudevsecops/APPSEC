@@ -13,7 +13,6 @@ sh ***
   }
 }
 
-
 stage ('Build') {
 sh 'mvn Clean package'
     }
